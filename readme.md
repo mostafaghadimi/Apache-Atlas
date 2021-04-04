@@ -279,3 +279,6 @@ Caused by: org.apache.zookeeper.KeeperException$ConnectionLossException: KeeperE
     at java.base/java.lang.Thread.run(Thread.java:834)
 2021-03-13 17:28:37,365 WARN  - [ReadOnlyZKClient-localhost:2181@0x39acd1f1:] ~ 0x39acd1f1 to localhost:2181 failed for list of /hbase, code = CONNECTIONLOSS, retries = 1 (ReadOnlyZKClient$ZKTask$1:192)
 ```
+
+For more details, I have asked a question on stackoverflow and was answered by Madhan, one of the main contributor of Apache Atlas, you can see the question [here](https://stackoverflow.com/questions/66614260/apache-atlas-http-error-503-service-unavailable). But the answer wasn't that helpful. I have tried the instructions on different machines (Also with Mark Chesnavsky). 
+After all of these steps, I was completely disappointed and switched to `release-2.1.0-rc3` version, which is also downloadable on [github repository](https://github.com/apache/atlas/releases).
