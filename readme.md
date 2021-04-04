@@ -282,3 +282,67 @@ Caused by: org.apache.zookeeper.KeeperException$ConnectionLossException: KeeperE
 
 For more details, I have asked a question on stackoverflow and was answered by Madhan, one of the main contributor of Apache Atlas, you can see the question [here](https://stackoverflow.com/questions/66614260/apache-atlas-http-error-503-service-unavailable). But the answer wasn't that helpful. I have tried the instructions on different machines (Also with Mark Chesnavsky). 
 After all of these steps, I was completely disappointed and switched to `release-2.1.0-rc3` version, which is also downloadable on [github repository](https://github.com/apache/atlas/releases).
+
+# Building and installing Apache Atlas 2.1.0 with Embedded Solr and HBase
+
+## Prerequisite:
+Make sure you have installed java on your machine. In case it is not installed on your computer, you can install it using the following command in Linux:
+```bash
+sudo apt-get install openjdk-8-jre
+```
+
+Then `JAVA_HOME` should be set:
+```
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+```
+
+## Building:
+1. Download Apache Atlas 2.1.0-rc3:
+    ```
+    wget https://github.com/apache/atlas/archive/refs/tags/release-2.1.0-rc3.tar.gz
+    ```
+2. Unpack it:
+    ```
+    tar -xzvf release-2.1.0-rc3.tar.gz
+    ```
+
+3. Set environment variables:
+    ```
+    export MANAGE_LOCAL_HBASE=true
+    export MANAGE_LOCAL_SOLR=true
+    ```
+4. Execute:
+    ```
+    mvn clean -DskipTests install
+    mvn clean -DskipTests package -Pdist,embedded-hbase-solr
+    ```
+5. Change the directory to distro/target and unpack the server tar file:
+    ```
+    cd distro/target
+    tar -xzvf apache-atlas-2.1.0-server.tar.gz
+    ```
+6. Change the directory to apache-atlas-2.1.0-server and run execute atlas_start.py script:
+    ```
+    cd apache-atlas-2.1.0-server
+    bin/atlas_start.py
+    ```
+
+**Important Tip 1:** In official documentation it is said to change directory to apache-atlas-2.1.0, not apache-atlas-2.1.0-server. I have tried it but it doesn't work.
+
+**Important Tip 2:** The following log doesn't mean that Apache Atlas is currently running!
+```
+configured for local hbase.
+hbase started.
+configured for local solr.
+solr started.
+setting up solr collections…
+starting atlas on host localhost
+starting atlas on port 21000
+Apache Atlas Server started!!
+```
+
+To ensure that it is working properly or not, check the `application.log` in logs directory. If everything would be OK, it takes about 10 minutes to run without any error.
+
+![localhost](screenshots/localhost.png "localhost:21000")
+
+![curl](screenshots/curl.png "curl")
