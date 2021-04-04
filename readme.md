@@ -346,3 +346,30 @@ To ensure that it is working properly or not, check the `application.log` in log
 ![localhost](screenshots/localhost.png "localhost:21000")
 
 ![curl](screenshots/curl.png "curl")
+
+# Errors:
+
+1. 
+    ```
+    Exception: [Errno 1] Operation not permitted 
+    Traceback (most recent call last):
+    File "bin/atlas_stop.py", line 128, in <module>
+        returncode = main()
+    File "bin/atlas_stop.py", line 59, in main
+        os.kill(pid, SIGTERM)
+    OSError: [Errno 1] Operation not permitted
+    ```
+
+    In my case this issue was because of running scripts from incorrect direcotry. The correct directory is `<installed-path>/atlas/distro/target/apache-atlas-2.1.0-server/bin/`. Even if with root access you'll face to problem.
+
+2. 
+    ```
+    [ReadOnlyZKClient-localhost:2181@0x72543547:] ~ 0x72543547 to localhost:2181 failed for list of /hbase, code = CONNECTIONLOSS, retries = 20 (ReadOnlyZKClient$ZKTask$1:192)
+    ```
+    I didn't find any solution for this error (Apache Atlas 3.0.0 snapshot), but as Madhan (one of the main contributor of Apache Atlas) said:
+    > The error is about failing to get /hbase zknode in zookeeper. Can you verify that HBase is up and running? HBase logs would be in apache-atlas-3.0.0-SNAPSHOT/hbase/logs directory.
+    > BTW, I built the same profile, embedded-hbase-solr, from latest master few minutes back and was able to start successfully.
+
+    **PS 1**: For more details you can check out [this link](https://stackoverflow.com/questions/66614260/apache-atlas-http-error-503-service-unavailable).
+
+    **PS 2**: The complete log of error is also available [here](./apache-atlas-3-0-0-snapshot-failed-log.log).
